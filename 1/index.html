@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>1</title>
+        <style media="screen">
+            body{
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100vw;
+                background-color: black;
+                color: rgb(255, 255, 255);
+            }
+            /*设置容器*/
+            .block{
+                position: fixed;
+                top: 0;
+                width: 100%;
+                height: 100%;
+            }
+            /*设置显示的方块样式*/
+            .row{
+                width: 2vw;
+                height: 2vw;
+                /*background-color: red;*/
+                border-radius: 5px;
+            }
+            /*用于获取方块宽度*/
+            .w{
+                width: 2vw;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div id='block' class="block">
+            <span id="x"></span>
+            <span id="y"></span>
+            <div id='widthScreen' class="w"></div>
+        </div>
+
+        <script type="text/javascript">
+            window.onload = function(){
+                // 获取方块宽度
+                var widthScreen = document.getElementById('widthScreen');
+                widthScreen = widthScreen.offsetWidth;
+                // 获取当前的坐标位置
+                var x = document.getElementById('x');
+                var y = document.getElementById('y');
+                // 获取容器
+                var block = document.getElementById('block');
+                // 给容器添加事件监听
+                block.addEventListener('mousemove',function(event){
+                    // 显示坐标值
+                    x.innerHTML = 'x的值：'+ event.pageX + '</br>';
+                    y.innerHTML = 'y的值：'+ event.pageY;
+                    var xValue = event.pageX;
+                    var yValue = event.pageY;
+                    // 添加节点
+                    var row = document.createElement('div');
+                    row.innerHTML = "<div class='row'></div>";
+                    row.style.position = 'absolute';
+                    // 方块显示
+                    row.style.top = yValue - yValue%widthScreen+'px';
+                    row.style.left = xValue - xValue%widthScreen+'px';
+                    // 设置颜色随机
+                    row.firstChild.style.background = 'hsla('+ Math.random() * 360 + ',65%,50%,1)';
+                    block.appendChild(row,null);
+                    var colorValue = 1;
+                    var i = 0
+                    // 设置定时器循环
+                    var time = setInterval(function(){
+                        // 颜色逐渐变暗
+                        row.firstChild.style.background = 'hsla('+ Math.random() * 360 + ',65%,50%,'+(colorValue-0.2)+')';
+                        colorValue = colorValue-0.2;
+                        i++;
+                        if (i>=2) {
+                            // 循环两次就删除节点
+                            clearInterval(time);
+                            block.removeChild(block.firstChild);
+                        }
+                    },400);
+
+                },false);
+            }
+
+        </script>
+
+    </body>
+</html>
